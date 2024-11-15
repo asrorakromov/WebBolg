@@ -1,0 +1,41 @@
+*{
+    list-style: none !important;
+    text-decoration: none !important;
+}
+body{
+    background: url('../images/good.jpg ') no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.card-body {
+    background-color: grey;
+}
+
+.card-body button {
+    color: grey; /* Optional: Make the text on the buttons white for better contrast */
+}
+.card-footer {
+    background-color: grey;
+    display: flex;               /* Use flexbox for layout */
+    justify-content: space-between; /* Space out items */
+    align-items: center;        /* Center items vertically */
+    padding: 10px;              /* Add padding */
+    background-color: grey;    /* Match your card background */
+    position: relative;         /* Set position to relative for further adjustments */
+}
+
+.left-align {
+    display: block; /* Makes it take the full width */
+    text-align: left; /* Aligns text to the left */
+}
+
+.helptext, .change_ac div{
+    display: none;
+}
+
+
+
+.change_ac p label:last-child{
+    display: none;
+}

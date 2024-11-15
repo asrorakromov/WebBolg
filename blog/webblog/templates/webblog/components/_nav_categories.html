@@ -1,0 +1,7 @@
+{% load blog_tags %}
+<nav class="nav d-flex flex-column">
+    {% get_categories as categories %}
+    {% for category in categories %}
+    <a href="{{ category.get_absolute_url }}" class="btn btn-dark" style="height: 70px;">{{ category.title }}</a>
+    {% endfor %}
+</nav>

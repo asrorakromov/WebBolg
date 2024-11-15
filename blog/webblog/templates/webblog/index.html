@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block main %}
+<div class="d-flex justify-content-between p-2">
+    <div class="col-1">
+        <p>
+            <button  class="btn btn-dark border-light" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseWidthExample"
+                    aria-expanded="false" aria-controls="collapseWidthExample" style="width: 200px;">
+                Категории
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list"
+                     viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+            </button>
+        </p>
+        <div style="min-height: 150px;">
+            <div class="collapse collapse-horizontal" id="collapseWidthExample">
+                <div class="card card-body bg-dark border-light" style="width: 200px;">
+                    {% include 'webblog/components/_nav_categories.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-10">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% if not movies and 'search' in request.path %}
+            <h2 class="text-light p-3" style="margin: 0 auto">По вашему запросу ничего не найдено</h2>
+            {% else %}
+            {% for movie in movies %}
+            {% include 'webblog/components/_cards.html' %}
+            {% endfor %}
+            {% endif %}
+
+        </div>
+    </div>
+
+
+
+
+
+
+</div>
+
+{% endblock main %}
+
+
+
+

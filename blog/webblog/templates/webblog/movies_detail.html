@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block main %}
+
+<div class="d-flex justify-content-between">
+
+    <div class="col-9 ms-4">
+        <div class="card border-light">
+            <div class="card-body bg-dark">
+                {% if movie.video %}
+                <video src="{{ movie.video.url }}" width="100%" height="100%" controls muted></video>
+                {% else %}
+                <img src="{{ movie.get_photo }}" alt="" width="100%" height="100%">
+                {% endif %}
+
+            </div>
+            <div class="info p-2 bg-dark text-light ">
+                <div class="d-flex m-3">
+                    {% if profile.photo %}
+                    <img src="{{ profile.get_photo_profile }}" alt="" class="rounded-circle" width="40"
+                         height="40">
+                    {% else %}
+                    <img src="https://shkolafominskaya-r22.gosweb.gosuslugi.ru/netcat_files/177/2753/pustoe_foto_0.jpg" alt="" class="rounded-circle" width="40"
+                         height="40">
+                    {% endif %}
+                    <h4 class="p-1 ms-1">
+                        <a href="{% url 'profile' movie.author.profile.pk %}" style="text-decoration: none; color: inherit;">{{ movie.author.username }}</a>
+                    </h4>
+
+                    <div class="ms-auto">
+                        {% if request.user == movie.author %}
+                        <div class="btn-group dropstart">
+                            <button class="btn btn-dark btn-sm" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                     class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                                </svg>
+
+                            </button>
+                            <ul class="dropdown-menu bg-dark small" style="border: none;">
+                                <li>
+                                    <a class="dropdown-item text-light" href="{% url 'update' movie.pk %}"
+                                       style="color: #f8f9fa; background-color: #343a40; border: none;"
+                                       onmouseover="this.style.backgroundColor='#495057'; this.style.color='#f8f9fa';"
+                                       onmouseout="this.style.backgroundColor='#343a40'; this.style.color='#f8f9fa';">
+                                        Изменить
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-light" href="{% url 'delete' movie.pk %}"
+                                       style="color: #f8f9fa; background-color: #343a40; border: none;"
+                                       onmouseover="this.style.backgroundColor='#495057'; this.style.color='#f8f9fa';"
+                                       onmouseout="this.style.backgroundColor='#343a40'; this.style.color='#f8f9fa';">
+                                        Удалить
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+
+                <div class="d-flex justify-content-between">
+                    <div class="left">
+                        <h3 class="fw-4 m-3">{{ movie.title }}</h3>
+                        <h6 class="mt-1 m-3">{{ movie.content }}</h6>
+                        <div class="d-flex justify-content-between">
+                            <h2 class="card-text m-3" style="font-size: 16px;">Просмотрено : {{ movie.get_views }}</h2>
+                            <h2 class="card-text m-3" style="font-size: 16px;">Лайки : {{ movie.get_views }}</h2>
+                        </div>
+                        <p class="card-text m-3"><small class="text-light">{{ movie.time_ago }}</small></p>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <div class="comment bg-dark text-light p-3">
+                <form action="
+                {% if 'update_comment' not in request.path %}
+                {% url 'save_comment' movie.pk %}
+                {% endif %}"
+
+
+                      method="post" class="bg-dark border-light text-light">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    {% if request.user.is_authenticated %}
+                    <button class="btn btn-dark" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                             class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+                        </svg>
+                    </button>
+                    {% endif %}
+
+                </form>
+            </div>
+
+            <div class="comments_list bg-dark text-light p-3">
+                {% for comment in comments %}
+                <div class="card bg-dark text-light p-2 mt-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p>{{ comment.user }}</p>
+                            <p>{{ comment.text }}</p>
+                            <span style="font-size: 10px;">{{ comment.time_ago }}</span>
+                        </div>
+
+                        <div class="ms-auto">
+                            <div class="btn dropstart">
+                                {% if comment.user == request.user %}
+                                <button class="btn btn-dark btn-sm" type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false" style="border: none;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                         class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                                    </svg>
+                                </button>
+                                <ul class="dropdown-menu bg-dark small" style="border: none;">
+                                    <li>
+                                        <a class="dropdown-item text-light" href="{% url 'comment_update' comment.pk %}"
+                                           style="color: #f8f9fa; background-color: #343a40; border: none;"
+                                           onmouseover="this.style.backgroundColor='#495057'; this.style.color='#f8f9fa';"
+                                           onmouseout="this.style.backgroundColor='#343a40'; this.style.color='#f8f9fa';">
+                                            Изменить
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-light" href="{% url 'delete_comment' comment.pk %}"
+                                           style="color: #f8f9fa; background-color: #343a40; border: none;"
+                                           onmouseover="this.style.backgroundColor='#495057'; this.style.color='#f8f9fa';"
+                                           onmouseout="this.style.backgroundColor='#343a40'; this.style.color='#f8f9fa';">
+                                            Удалить
+                                        </a>
+                                    </li>
+                                </ul>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+                {% endfor %}
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="col-3 p-4 text-center">
+        <h3 class="text-light text-center">Рекомендации:</h3>
+        {% for movie in movies %}
+        <a href="{{ movie.get_absolute_url }}" class="card mt-3" style="text-decoration: none;">
+            <img src="{{ movie.get_photo }}" class="card-img-top" alt="..." width="200px" height="250px">
+            <div class="card-body">
+                <p class="card-text">{{ movie.title }}</p>
+            </div>
+        </a>
+
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock main %}
